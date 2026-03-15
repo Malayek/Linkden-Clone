@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ProConnect – Professional Network</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --blue: #0a66c2;
+      --blue-dark: #004182;
+      --blue-light: #e7f3ff;
+      --bg: #f3f2ef;
+      --white: #ffffff;
+      --text: #1b1f23;
+      --muted: #6b7280;
+      --border: #dcdcdc;
+      --accent: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* NAVBAR */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      gap: 1rem;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 4px;
+      background: var(--blue);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .nav-search {
+      display: flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      background: #eef3f8;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .nav-search input {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 180px;
+      font-size: 0.85rem;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 1.2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      align-items: center;
+    }
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      cursor: pointer;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+    }
+    .nav-tab span.icon {
+      font-size: 1rem;
+    }
+    .nav-tab.active {
+      color: var(--blue);
+      border-bottom: 2px solid var(--blue);
+    }
+    .nav-auth {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+    .btn-outline {
+      border-radius: 999px;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .btn-filled {
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+      border: none;
+      background: var(--blue);
+      color: var(--white);
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    /* LAYOUT */
+    main {
+      padding: 1rem 0 2rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 0.8rem;
+      margin-bottom: 0.6rem;
+    }
+
+    /* LEFT COLUMN – PROFILE CARD */
+    .profile-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .profile-cover {
+      width: calc(100% + 1.6rem);
+      height: 50px;
+      margin: -0.8rem -0.8rem 0.6rem;
+      background: linear-gradient(135deg, #0a66c2, #60a5fa);
+      border-radius: 8px 8px 0 0;
+    }
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid var(--white);
+      background: #0a66c2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 700;
+      margin-top: -32px;
+      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+    }
+    .profile-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .profile-title {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.15rem;
+    }
+    .profile-meta {
+      margin-top: 0.3rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .profile-actions {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.4rem;
+    }
+    .profile-stats {
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+    }
+
+    .profile-details small {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.72rem;
+      margin: 0.1rem;
+    }
+
+    /* CENTER – FEED */
+    .composer {
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+    }
+    .composer-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #0a66c2;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .composer-main {
+      flex: 1;
+    }
+    .composer-main textarea {
+      width: 100%;
+      min-height: 54px;
+      resize: vertical;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .composer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .composer-buttons {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .composer-buttons button {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .feed-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .post {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 0.7rem;
+      margin-top: 0.7rem;
+    }
+    .post-header {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+    .post-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #374151;
+      overflow: hidden;
+    }
+    .post-header-info {
+      flex: 1;
+    }
+    .post-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .post-title {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .post-meta {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+    .post-content {
+      font-size: 0.85rem;
+      margin-top: 0.2rem;
+      white-space: pre-line;
+    }
+    .post-image {
+      margin-top: 0.4rem;
+      border-radius: 8px;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      height: 180px;
+      position: relative;
+    }
+    .post-image-label {
+      position: absolute;
+      bottom: 0.3rem;
+      left: 0.4rem;
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--white);
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+    }
+    .post-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.35rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .post-actions button {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.78rem;
+      color: #4b5563;
+    }
+
+    /* RIGHT COLUMN – JOBS & TRENDS */
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .job-item {
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .job-title {
+      font-weight: 600;
+      margin-bottom: 0.1rem;
+    }
+    .job-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .trend-item {
+      font-size: 0.78rem;
+      margin-bottom: 0.4rem;
+    }
+    .trend-item span {
+      display: block;
+    }
+    .trend-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* MESSAGES PANEL */
+    .messages-list {
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+    }
+    .message-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+      align-items: center;
+    }
+    .message-info span {
+      display: block;
+    }
+    .message-name {
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .message-preview {
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+    .message-badge {
+      font-size: 0.7rem;
+      color: var(--blue);
+    }
+    .message-compose {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.3rem;
+      align-items: center;
+    }
+    .message-compose input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.75rem;
+      outline: none;
+    }
+    .message-compose button {
+      border-radius: 999px;
+      border: none;
+      background: var(--blue);
+      color: var(--white);
+      padding: 0.25rem 0.7rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.7fr);
+      }
+      .right-col {
+        display: none;
+      }
+    }
+    @media (max-width: 720px) {
+      .nav-search input {
+        width: 120px;
+      }
+      .nav-tabs {
+        display: none;
+      }
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .left-col {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header>
+    <div class="container">
+      <div class="nav">
+        <div class="nav-left">
+          <div class="logo">P</div>
+          <div class="nav-search">
+            🔍
+            <input type="text" placeholder="Search people, jobs, posts…" />
+          </div>
+        </div>
+        <div class="nav-tabs">
+          <div class="nav-tab active">
+            <span class="icon">🏠</span>
+            <span>Home</span>
+          </div>
+          <div class="nav-tab">
+            <span class="icon">👥</span>
+            <span>My Network</span>
+          </div>
+          <div class="nav-tab">
+            <span class="icon">💼</span>
+            <span>Jobs</span>
+          </div>
+          <div class="nav-tab">
+            <span class="icon">💬</span>
+            <span>Messaging</span>
+          </div>
+        </div>
+        <div class="nav-auth">
+          <button class="btn-outline" onclick="alert('Demo only – no real backend yet.')">Log in</button>
+          <button class="btn-filled" onclick="alert('Demo signup – connect backend later.')">Join now</button>
+        </div>
+      </div>
+    </div>
+    </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+      <div class="layout">
+        <!-- LEFT COLUMN: PROFILE & SUGGESTED CONNECTIONS -->
+        <div class="left-col">
+          <div class="card">
+            <div class="profile-top">
+              <div class="profile-cover"></div>
+              <div class="avatar">KA</div>
+              <div class="profile-name">Khalil Ahmad</div>
+              <div class="profile-title">
+                Full‑stack Accountant · Founder at NextGen Accountants
+              </div>
+              <div class="profile-meta">
+                Lahore, Pakistan · Accounting · Tax & Advisory
+              </div>
+              <div class="profile-actions">
+                <button class="btn-filled" style="font-size:0.78rem;">Open to work</button>
+                <button class="btn-outline" style="font-size:0.78rem;">Add profile section</button>
+              </div>
+              <div class="profile-stats">
+                <span>Connections · 500+</span>
+                <span>Profile views · 87</span>
+              </div>
+            </div>
+            <div class="profile-details" style="margin-top:0.6rem;">
+              <small>Skills</small>
+              <div>
+                <span class="chip">Tax strategy</span>
+                <span class="chip">Financial modeling</span>
+                <span class="chip">Accounting for creators</span>
+              </div>
+              <small style="margin-top:0.4rem;">Summary</small>
+              <div style="font-size:0.78rem;">
+                Helping creators, startups, and small businesses make confident money decisions with clear numbers.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">Suggested connections</div>
+            <div style="font-size:0.8rem;">
+              <div style="margin-bottom:0.4rem;">
+                <strong>MrBeast (Jimmy Donaldson)</strong><br />
+                <span style="color:var(--muted); font-size:0.75rem;">Creator · MrBeast & Feastables</span><br />
+                <button class="btn-outline" style="margin-top:0.2rem; font-size:0.75rem;">Connect</button>
+              </div>
+              <div style="margin-bottom:0.4rem;">
+                <strong>Cristiano Ronaldo</strong><br />
+                <span style="color:var(--muted); font-size:0.75rem;">Footballer · CR7 Legacy</span><br />
+                <button class="btn-outline" style="margin-top:0.2rem; font-size:0.75rem;">Connect</button>
+              </div>
+              <div style="margin-bottom:0.4rem;">
+                <strong>NextGen Accountants</strong><br />
+                <span style="color:var(--muted); font-size:0.75rem;">Company · Digital‑first accounting</span><br />
+                <button class="btn-outline" style="margin-top:0.2rem; font-size:0.75rem;">Follow</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENTER COLUMN: FEED -->
+        <div class="center-col">
+          <div class="card">
+            <div class="composer">
+              <div class="composer-avatar">KA</div>
+              <div class="composer-main">
+                <textarea placeholder="Start a post about accounting, business, or creator economy…"></textarea>
+                <div class="composer-actions">
+                  <div class="composer-buttons">
+                    <button type="button">📷 Photo</button>
+                    <button type="button">🎥 Video</button>
+                    <button type="button">💼 Job</button>
+                    <button type="button">✍️ Article</button>
+                  </div>
+                  <button class="btn-filled" style="font-size:0.78rem;">Post</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="feed-title">For you</div>
+
+            <!-- POST 1 – NextGen Accountants -->
+            <article class="post">
+              <div class="post-header">
+                <div class="post-avatar" style="background:#0a66c2; color:#fff;">
+                  NG
+                </div>
+                <div class="post-header-info">
+                  <div class="post-name">NextGen Accountants</div>
+                  <div class="post-title">Helping creators & small businesses scale with confident numbers</div>
+                  <div class="post-meta">Promoted · 2h · #Accounting · #Startup</div>
+                </div>
+              </div>
+              <div class="post-content">
+We help founders and content creators understand cash flow, taxes, and growth – not just “file returns”.
+
+For UK highway contractors and digital agencies, we manage your books and tax strategy starting from £1,000–£2,000 per year, depending on complexity.
+
+If your numbers feel messy but your ambition is big, NextGen Accountants can do this job — strategy, systems, and monthly clarity reports.
+              </div>
+              <div class="post-image" style="background-image:linear-gradient(135deg,#0a66c2,#60a5fa);">
+                <div class="post-image-label">NextGen Accountants · Highways & digital clients</div>
+              </div>
+              <div class="post-actions">
+                <button type="button">👍 Like</button>
+                <button type="button">💬 Comment</button>
+                <button type="button">🔁 Repost</button>
+                <button type="button">✉️ Send</button>
+              </div>
+            </article>
+
+            <!-- POST 2 – MrBeast with chocolate -->
+            <article class="post">
+              <div class="post-header">
+                <div class="post-avatar">
+                  MB
+                </div>
+                <div class="post-header-info">
+                  <div class="post-name">MrBeast</div>
+                  <div class="post-title">Founder at Feastables · Creator</div>
+                  <div class="post-meta">1d · Creator economy · #Feastables · #BrandBuilding</div>
+                </div>
+              </div>
+              <div class="post-content">
+Launching a chocolate bar is not “just” about candy — it’s supply chain, margins, storytelling, and community.
+
+Feastables is a lesson in building a consumer brand that lives both online and on real shelves. If you’re a student or early founder, go deep on operations, not just views.
+              </div>
+              <div class="post-image" style="background-image:linear-gradient(135deg,#f97316,#facc15);">
+                <div class="post-image-label">MrBeast · Feastables chocolate visual</div>
+              </div>
+              <div class="post-actions">
+                <button type="button">👍 Like</button>
+                <button type="button">💬 Comment</button>
+                <button type="button">🔁 Repost</button>
+                <button type="button">✉️ Send</button>
+              </div>
+            </article>
+
+            <!-- POST 3 – Cristiano Ronaldo & stadium -->
+            <article class="post">
+              <div class="post-header">
+                <div class="post-avatar">
+                  CR
+                </div>
+                <div class="post-header-info">
+                  <div class="post-name">Cristiano Ronaldo</div>
+                  <div class="post-title">Athlete · Investor · CR7 Brand</div>
+                  <div class="post-meta">3d · Sports · #Leadership · #HighPerformance</div>
+                </div>
+              </div>
+              <div class="post-content">
+Every stadium is full of noise, but your mind has to be clear.
+
+For 20+ years, I have treated football like a job and a craft: discipline, recovery, and staying hungry. Whether you are in business or sport, consistency is your real superstar.
+              </div>
+              <div class="post-image" style="background-image:linear-gradient(135deg,#1e3a8a,#10b981);">
+                <div class="post-image-label">CR7 · Stadium & legacy</div>
+              </div>
+              <div class="post-actions">
+                <button type="button">👍 Like</button>
+                <button type="button">💬 Comment</button>
+                <button type="button">🔁 Repost</button>
+                <button type="button">✉️ Send</button>
+              </div>
+            </article>
+
+            <!-- POST 4 – Chinese post with temple -->
+            <article class="post">
+              <div class="post-header">
+                <div class="post-avatar">
+                  CN
+                </div>
+                <div class="post-header-info">
+                  <div class="post-name">Li Wei</div>
+                  <div class="post-title">Product Manager · Shanghai</div>
+                  <div class="post-meta">5h · #产品思维 · #职业发展</div>
+                </div>
+              </div>
+              <div class="post-content">
+你好，朋友们。
+
+在快节奏的互联网行业里，保持长期职业成长，比一次“爆发式升职”更重要。就像一座古老的寺庙，一块砖一块砖堆起来，每一次迭代都在打基础。
+              </div>
+              <div class="post-image" style="background-image:linear-gradient(135deg,#a855f7,#f97316);">
+                <div class="post-image-label">古寺剪影 · Chinese temple vibe</div>
+              </div>
+              <div class="post-actions">
+                <button type="button">👍 Like</button>
+                <button type="button">💬 Comment</button>
+                <button type="button">🔁 Repost</button>
+                <button type="button">✉️ Send</button>
+              </div>
+            </article>
+
+            <!-- POST 5 – Second Chinese‑style mini post -->
+            <article class="post">
+              <div class="post-header">
+                <div class="post-avatar">
+                  晓
+                </div>
+                <div class="post-header-info">
+                  <div class="post-name">Chen Xiao</div>
+                  <div class="post-title">Data Engineer · Beijing</div>
+                  <div class="post-meta">1d · #数据 · #Career</div>
+                </div>
+              </div>
+              <div class="post-content">
+写代码像练字，一笔一划都算数。
+
+不要急着“跳槽”，先问问自己：这个岗位，我是不是已经学到 80% 以上可以学的东西？
+              </div>
+              <div class="post-actions">
+                <button type="button">👍 Like</button>
+                <button type="button">💬 Comment</button>
+                <button type="button">🔁 Repost</button>
+                <button type="button">✉️ Send</button>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: JOBS, TRENDS, MESSAGES -->
+        <div class="right-col">
+          <div class="card">
+            <div class="section-title">Jobs for you</div>
+            <div class="job-item">
+              <div class="job-title">Senior Accountant – Digital Agencies</div>
+              <div class="job-meta">NextGen Accountants · Lahore (Hybrid)</div>
+              <div class="job-meta">Experience: 3–5 years · ACCA / CA preferred</div>
+            </div>
+            <div class="job-item">
+              <div class="job-title">Finance Manager – Creator Brand</div>
+              <div class="job-meta">Global Chocolate Brand · Remote (UK)</div>
+              <div class="job-meta">Experience: 5+ years · FMCG + content</div>
+            </div>
+            <div class="job-item">
+              <div class="job-title">Data Analyst – Sports & Performance</div>
+              <div class="job-meta">CR7 Ventures · Lisbon</div>
+              <div class="job-meta">Experience: 2–4 years · SQL · Python</div>
+            </div>
+            <button class="btn-outline" style="margin-top:0.5rem; font-size:0.78rem;">View all jobs</button>
+          </div>
+
+          <div class="card">
+            <div class="section-title">Trending content</div>
+            <div class="trend-item">
+              <span>How accountants are becoming growth partners for creators</span>
+              <span class="trend-meta">NextGen Accountants · 1,204 readers</span>
+            </div>
+            <div class="trend-item">
+              <span>Behind the scenes of launching a global chocolate brand</span>
+              <span class="trend-meta">MrBeast · 8,756 readers</span>
+            </div>
+            <div class="trend-item">
+              <span>Data, mindset, and long careers in football</span>
+              <span class="trend-meta">Cristiano Ronaldo · 6,312 readers</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">Messaging</div>
+            <div class="messages-list" id="messagesList">
+              <div class="message-row">
+                <div class="message-info">
+                  <span class="message-name">NextGen Accountants</span>
+                  <span class="message-preview">“Khalil, let’s review your client pipeline for Q2…”</span>
+                </div>
+                <span class="message-badge">New</span>
+              </div>
+              <div class="message-row">
+                <div class="message-info">
+                  <span class="message-name">MrBeast Recruiting</span>
+                  <span class="message-preview">“We saw your portfolio. Interested in a finance chat…”</span>
+                </div>
+              </div>
+              <div class="message-row">
+                <div class="message-info">
+                  <span class="message-name">CR7 Ventures</span>
+                  <span class="message-preview">“Can you share examples of dashboards you built?”</span>
+                </div>
+              </div>
+            </div>
+            <div class="message-compose">
+              <input id="msgInput" type="text" placeholder="Message a connection with a personal note…" />
+              <button type="button" onclick="sendDemoMessage()">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function sendDemoMessage() {
+      const input = document.getElementById("msgInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const list = document.getElementById("messagesList");
+      const row = document.createElement("div");
+      row.className = "message-row";
+      row.innerHTML = `
+        <div class="message-info">
+          <span class="message-name">You · New connection</span>
+          <span class="message-preview">${text}</span>
+        </div>
+        <span class="message-badge">Sent</span>
+      `;
+      list.prepend(row);
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
